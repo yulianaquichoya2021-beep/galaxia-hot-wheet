@@ -26,21 +26,27 @@
 
     #main-title {
       position: fixed;
-      top: 40px;
+      top: 30px;
       left: 0;
       right: 0;
       width: 100%;
-      font-size: 2.6em;
+      font-size: 2.2em;
       color: #CDEBFF;
-      white-space: nowrap;
+      white-space: normal;
       text-shadow: 0 0 10px #0099FF, 0 0 18px #00CFFF;
       z-index: 10;
       pointer-events: none;
       text-align: center;
       font-family: 'Indie Flower', 'Segoe Script', cursive;
+      padding: 0 15px;
+      line-height: 1.2;
     }
     @media (max-width: 768px) {
-      #main-title { font-size: 1.55em; top: 22px; white-space: normal; padding: 0 10px; line-height: 1.15; }
+      #main-title { 
+        font-size: 1.3em; 
+        top: 15px; 
+        padding: 0 12px; 
+      }
     }
 
     #start-screen {
@@ -62,7 +68,7 @@
     }
     #start-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     #start-heart {
-      font-size: clamp(74px, 23vmin, 148px);
+      font-size: clamp(60px, 18vmin, 120px);
       line-height: 1;
       display: block;
       filter: drop-shadow(0 0 14px rgba(0,153,255,.75)) drop-shadow(0 0 36px rgba(0,207,255,.38));
@@ -77,7 +83,7 @@
       50% { transform: scale(1); }
     }
     #start-text {
-      font-size: 1.8em;
+      font-size: 1.5em;
       color: #CDEBFF;
       font-family: 'Indie Flower', 'Segoe Script', cursive;
       text-shadow: 0 0 7px #0099FF;
@@ -133,7 +139,7 @@
       background: linear-gradient(160deg, rgba(0,30,55,.96), rgba(0,10,20,.98));
       border: 1px solid rgba(51,181,255,.35);
       border-radius: 22px;
-      padding: 40px 32px;
+      padding: 35px 25px;
       box-shadow: 0 0 40px rgba(51,181,255,.35);
       color: #CDEBFF;
       font-family: 'Indie Flower', 'Segoe Script', cursive;
@@ -144,13 +150,13 @@
     #msg-overlay.visible #msg-card { transform: translateY(0) scale(1); }
     #msg-card h2 {
       text-align: center;
-      margin: 0 0 22px;
+      margin: 0 0 20px;
       font-size: 1.8rem;
       font-weight: 700;
       color: #CDEBFF;
       text-shadow: 0 0 10px #0099FF, 0 0 18px #00CFFF;
     }
-    #msg-card p { line-height: 1.75; font-size: 1.1rem; margin: 0 0 16px; text-shadow: 0 0 8px rgba(0,153,255,.2); }
+    #msg-card p { line-height: 1.6; font-size: 1.1rem; margin: 0 0 16px; text-shadow: 0 0 8px rgba(0,153,255,.2); }
     #msg-close {
       position: absolute;
       top: 14px;
@@ -165,10 +171,10 @@
     }
     #msg-close:hover { color: #fff; }
     @media (max-width: 480px) {
-      #msg-button { width: 50px; height: 50px; bottom: 16px; right: 16px; }
-      #msg-card { padding: 30px 22px; border-radius: 18px; }
-      #msg-card h2 { font-size: 1.5rem; }
-      #msg-card p { font-size: 1rem; }
+      #msg-button { width: 48px; height: 48px; bottom: 14px; right: 14px; }
+      #msg-card { padding: 25px 18px; border-radius: 18px; }
+      #msg-card h2 { font-size: 1.4rem; }
+      #msg-card p { font-size: 0.98rem; }
     }
   </style>
 </head>
@@ -204,12 +210,16 @@
     const CONFIG = {
       titulo: "Feliz 30 de septiembre 🚗🖤",
       frases: [
-        "🚗 Contigo la carretera es mejor","🏎️ Acelerando hasta lo que viene","🚗 Gracias por ser tú","🏎️ Eres mi persona favorita",
-        "🚗 Contigo hasta lo simple es brillante","🏎️ Feliz día para ti","🚗 Contigo siempre a mil por hora","🏎️ Eres único",
-        "🚗 Me alegra conocerte","🏎️ Contigo el día pesa menos","🚗 Un gracias que no necesita fecha","🏎️ Tu risa le hace bien a mis días",
-        "🚗 Hoy celebro tenerte cerca","🏎️ Apareces cuando más hace falta","🚗 Solo para ti, sin freno","🏎️ Feliz día, contigo todo es mejor"
+        "🚗 Contigo la carretera es mejor", "🏎️ Acelerando hasta lo que viene", 
+        "🚗 Gracias por ser tú", "🏎️️ Eres mi persona favorita",
+        "🚗 Contigo hasta lo simple es brillante", "🏎️ Feliz día para ti", 
+        "🚗 Contigo siempre a mil por hora", "🏎️ Eres único",
+        "🚗 Me alegra conocerte", "🏎️ Contigo el día pesa menos", 
+        "🚗 Un gracias que no necesita fecha", "🏎️ Tu risa le hace bien a mis días",
+        "🚗 Hoy celebro tenerte cerca", "🏎️ Apareces cuando más hace falta", 
+        "🚗 Solo para ti, sin freno", "🏎️ Feliz día, contigo todo es mejor"
       ],
-      fotos: ["activos/img1.png","activos/img2.png","activos/img3.png"],
+      fotos: ["activos/img1.jpg", "activos/img2.jpg", "activos/img3.jpg"],
       musica: "activos/musica.mp3",
       mensaje_texto: "Hola mi amor, quiero preparar este pequeño detalle para grabar lo mucho que te quiero y lo importante que eres para mí.🖤.\n\nGracias por acompañarme en cada momento y por sacar siempre una sonrisa. Espero que te guste esta sorpresita🖤.\n\n¡Eres lo mejor que me ha pasado! 🚗💨🖤"
     };
@@ -251,8 +261,11 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     const scene = new THREE.Scene();
+    const isMobile = window.innerWidth < 768;
+    const baseCamDist = isMobile ? 420 : 320;
+    
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
-    camera.position.z = 300;
+    camera.position.z = baseCamDist;
 
     // Campo de Estrellas
     (function makeStars(count = 2000, spread = 3000) {
@@ -272,7 +285,7 @@
 
     // Agujero Negro
     const core = new THREE.Mesh(
-      new THREE.SphereGeometry(40, 64, 64),
+      new THREE.SphereGeometry(38, 64, 64),
       new THREE.MeshBasicMaterial({ color: 0x030303 })
     );
     scene.add(core);
@@ -292,21 +305,35 @@
       return new THREE.CanvasTexture(c);
     }
     const ring = new THREE.Mesh(
-      new THREE.RingGeometry(42, 116, 160),
+      new THREE.RingGeometry(40, 110, 160),
       new THREE.MeshBasicMaterial({ map: ringTexture(), transparent: true, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
     );
     ring.rotation.x = Math.PI / 2;
     ring.rotation.z = 0.34;
     scene.add(ring);
 
-    // Frases Flotantes
+    // Textura de frases con ajuste de texto automático
     function makeTextTexture(texto, color) {
-      const c = document.createElement('canvas'); c.width = 512; c.height = 128;
-      const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height);
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#fff'; ctx.shadowColor = color; ctx.shadowBlur = 30;
-      let fontSize = 48;
-      ctx.font = fontSize + "px 'Indie Flower', cursive";
+      const c = document.createElement('canvas'); 
+      c.width = 512; 
+      c.height = 128;
+      const ctx = c.getContext('2d'); 
+      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.textAlign = 'center'; 
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#ffffff'; 
+      ctx.shadowColor = color; 
+      ctx.shadowBlur = 18;
+      
+      let fontSize = 32;
+      ctx.font = `bold ${fontSize}px 'Indie Flower', cursive`;
+      
+      // Manejo simple para frases largas
+      if (ctx.measureText(texto).width > 480) {
+        fontSize = 24;
+        ctx.font = `bold ${fontSize}px 'Indie Flower', cursive`;
+      }
+
       ctx.fillText(texto, c.width / 2, c.height / 2);
       return new THREE.CanvasTexture(c);
     }
@@ -315,18 +342,45 @@
     const textGroup = new THREE.Group();
     scene.add(textGroup);
 
+    // Distribución esférica más separada
+    const totalFrases = CONFIG.frases.length;
     CONFIG.frases.forEach((frase, i) => {
       const tex = makeTextTexture(frase, COLORES[i % COLORES.length]);
       const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
-      sp.scale.set(68, 21.8, 1);
-      const phi = Math.acos(2 * Math.random() - 1);
-      const theta = Math.random() * Math.PI * 2;
-      const r = 150 + Math.random() * 120;
-      sp.position.set(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta));
+      
+      // Ajustar escala física de los Sprites
+      const spriteScaleX = isMobile ? 52 : 62;
+      sp.scale.set(spriteScaleX, spriteScaleX * 0.25, 1);
+      
+      const phi = Math.acos(-1 + (2 * i + 1) / totalFrases);
+      const theta = Math.sqrt(totalFrases * Math.PI) * phi;
+      const r = isMobile ? (160 + (i % 3) * 30) : (140 + (i % 3) * 35);
+      
+      sp.position.set(
+        r * Math.sin(phi) * Math.cos(theta), 
+        r * Math.cos(phi), 
+        r * Math.sin(phi) * Math.sin(theta)
+      );
       textGroup.add(sp);
     });
 
-    // Animación y Rotación de Cámara
+    // Renderizado de fotos de Hot Wheels en el espacio 3D
+    const textureLoader = new THREE.TextureLoader();
+    CONFIG.fotos.forEach((fotoUrl, i) => {
+      textureLoader.load(fotoUrl, (tex) => {
+        const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+        const sp = new THREE.Sprite(mat);
+        const photoScale = isMobile ? 38 : 48;
+        sp.scale.set(photoScale, photoScale, 1);
+
+        const angle = (i / CONFIG.fotos.length) * Math.PI * 2;
+        const radius = isMobile ? 180 : 160;
+        sp.position.set(Math.cos(angle) * radius, (i - 1) * 40, Math.sin(angle) * radius);
+        textGroup.add(sp);
+      }, undefined, () => {});
+    });
+
+    // Animación y Rotación con Control de Arrastre
     let isPointerDown = false, startX = 0, startY = 0;
     let targetRotX = 0.2, targetRotY = 0;
 
@@ -334,8 +388,9 @@
     function onMove(e) {
       if (!isPointerDown) return;
       const t = e.touches ? e.touches[0] : e;
-      targetRotY += (t.clientX - startX) * 0.005;
-      targetRotX += (t.clientY - startY) * 0.005;
+      targetRotY += (t.clientX - startX) * 0.004;
+      targetRotX += (t.clientY - startY) * 0.004;
+      targetRotX = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, targetRotX));
       startX = t.clientX; startY = t.clientY;
     }
     function onUp() { isPointerDown = false; }
@@ -349,12 +404,13 @@
 
     function animate() {
       requestAnimationFrame(animate);
-      textGroup.rotation.y += 0.001;
-      ring.rotation.z += 0.0005;
+      textGroup.rotation.y += 0.0012;
+      ring.rotation.z += 0.0006;
 
-      camera.position.x = 300 * Math.sin(targetRotY) * Math.cos(targetRotX);
-      camera.position.y = 300 * Math.sin(targetRotX);
-      camera.position.z = 300 * Math.cos(targetRotY) * Math.cos(targetRotX);
+      const currentDist = (window.innerWidth < 768) ? 420 : 320;
+      camera.position.x = currentDist * Math.sin(targetRotY) * Math.cos(targetRotX);
+      camera.position.y = currentDist * Math.sin(targetRotX);
+      camera.position.z = currentDist * Math.cos(targetRotY) * Math.cos(targetRotX);
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
