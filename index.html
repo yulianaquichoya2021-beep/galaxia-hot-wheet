@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Galaxia Simple - Hot Wheels</title>
+  <meta name="description" content="Una galaxia sencilla en azul con agujero negro, anillo brillante y fotos de Hot Wheels flotando entre frases.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏎️</text></svg>">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    canvas { display: block; }
+
+    #main-title {
+      position: fixed;
+      top: 40px;
+      left: 0;
+      right: 0;
+      width: 100%;
+      font-size: 2.6em;
+      color: #CDEBFF;
+      white-space: nowrap;
+      text-shadow: 0 0 10px #0099FF, 0 0 18px #00CFFF;
+      z-index: 10;
+      pointer-events: none;
+      text-align: center;
+      font-family: 'Indie Flower', 'Segoe Script', cursive;
+    }
+    @media (max-width: 768px) {
+      #main-title { font-size: 1.55em; top: 22px; white-space: normal; padding: 0 10px; line-height: 1.15; }
+    }
+
+    #start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #fff;
+      z-index: 9999;
+      padding: 20px;
+      cursor: pointer;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+    #start-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    #start-heart {
+      font-size: clamp(74px, 23vmin, 148px);
+      line-height: 1;
+      display: block;
+      filter: drop-shadow(0 0 14px rgba(0,153,255,.75)) drop-shadow(0 0 36px rgba(0,207,255,.38));
+      animation: heartbeat 1.35s ease-in-out infinite;
+      transform-origin: 50% 55%;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      12% { transform: scale(1.15); }
+      24% { transform: scale(1); }
+      36% { transform: scale(1.07); }
+      50% { transform: scale(1); }
+    }
+    #start-text {
+      font-size: 1.8em;
+      color: #CDEBFF;
+      font-family: 'Indie Flower', 'Segoe Script', cursive;
+      text-shadow: 0 0 7px #0099FF;
+      text-align: center;
+      margin-top: clamp(16px, 3.5vh, 28px);
+      animation: blink 2.2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+
+    #msg-button {
+      display: none;
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1800;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0d6fc4, #33b5ff);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(51,181,255,.6), 0 4px 14px rgba(0,0,0,.35);
+      align-items: center;
+      justify-content: center;
+      animation: msgBeat 1.8s ease-in-out infinite;
+      transition: transform 0.25s ease;
+    }
+    #msg-button:hover { transform: scale(1.08); }
+    @keyframes msgBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+    #msg-button svg { width: 24px; height: 24px; stroke: #fff; }
+
+    #msg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2500;
+      background: rgba(0, 10, 20, .82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .4s ease;
+      padding: 24px;
+    }
+    #msg-overlay.visible { opacity: 1; pointer-events: auto; }
+    #msg-card {
+      max-width: 620px;
+      width: 100%;
+      max-height: 82vh;
+      overflow-y: auto;
+      background: linear-gradient(160deg, rgba(0,30,55,.96), rgba(0,10,20,.98));
+      border: 1px solid rgba(51,181,255,.35);
+      border-radius: 22px;
+      padding: 40px 32px;
+      box-shadow: 0 0 40px rgba(51,181,255,.35);
+      color: #CDEBFF;
+      font-family: 'Indie Flower', 'Segoe Script', cursive;
+      transform: translateY(18px) scale(.96);
+      transition: transform .4s ease;
+      position: relative;
+    }
+    #msg-overlay.visible #msg-card { transform: translateY(0) scale(1); }
+    #msg-card h2 {
+      text-align: center;
+      margin: 0 0 22px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #CDEBFF;
+      text-shadow: 0 0 10px #0099FF, 0 0 18px #00CFFF;
+    }
+    #msg-card p { line-height: 1.75; font-size: 1.1rem; margin: 0 0 16px; text-shadow: 0 0 8px rgba(0,153,255,.2); }
+    #msg-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #7fd4ff;
+      font-size: 1.35rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    #msg-close:hover { color: #fff; }
+    @media (max-width: 480px) {
+      #msg-button { width: 50px; height: 50px; bottom: 16px; right: 16px; }
+      #msg-card { padding: 30px 22px; border-radius: 18px; }
+      #msg-card h2 { font-size: 1.5rem; }
+      #msg-card p { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="c"></canvas>
+  <h1 id="main-title"></h1>
+
+  <div id="start-screen">
+    <div id="start-heart" aria-hidden="true">🏎️</div>
+    <div id="start-text">Toca para iniciar</div>
+  </div>
+
+  <button id="msg-button" type="button" aria-label="Ver mensaje">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  </button>
+
+  <div id="msg-overlay">
+    <div id="msg-card">
+      <button id="msg-close" aria-label="Cerrar mensaje">✕</button>
+      <h2>Para ti 🖤</h2>
+      <div id="msg-body"></div>
+    </div>
+  </div>
+
+  <audio id="audio" loop>
+    <source src="activos/musica.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+
+  <script>
+    const CONFIG = {
+      titulo: "Feliz 30 de septiembre 🚗🖤",
+      frases: [
+        "🚗 Contigo la carretera es mejor","🏎️ Acelerando hasta lo que viene","🚗 Gracias por ser tú","🏎️ Eres mi persona favorita",
+        "🚗 Contigo hasta lo simple es brillante","🏎️ Feliz día para ti","🚗 Contigo siempre a mil por hora","🏎️ Eres único",
+        "🚗 Me alegra conocerte","🏎️ Contigo el día pesa menos","🚗 Un gracias que no necesita fecha","🏎️ Tu risa le hace bien a mis días",
+        "🚗 Hoy celebro tenerte cerca","🏎️ Apareces cuando más hace falta","🚗 Solo para ti, sin freno","🏎️ Feliz día, contigo todo es mejor"
+      ],
+      fotos: ["activos/img1.png","activos/img2.png","activos/img3.png"],
+      musica: "activos/musica.mp3",
+      mensaje_texto: "Hola mi amor, quiero preparar este pequeño detalle para grabar lo mucho que te quiero y lo importante que eres para mí.🖤.\n\nGracias por acompañarme en cada momento y por sacar siempre una sonrisa. Espero que te guste esta sorpresita🖤.\n\n¡Eres lo mejor que me ha pasado! 🚗💨🖤"
+    };
+
+    // Título y Audio
+    document.getElementById('main-title').textContent = CONFIG.titulo;
+    const startScreen = document.getElementById('start-screen');
+    const audio = document.getElementById('audio');
+
+    startScreen.addEventListener('click', () => {
+      startScreen.classList.add('hidden');
+      audio.play().catch(() => {});
+    });
+
+    // Mensaje flotante
+    const mensajeTexto = (CONFIG.mensaje_texto || '').trim();
+    if (mensajeTexto) {
+      const msgButton = document.getElementById('msg-button');
+      const msgOverlay = document.getElementById('msg-overlay');
+      const msgClose = document.getElementById('msg-close');
+      const msgBody = document.getElementById('msg-body');
+
+      mensajeTexto.split(/\n\s*\n/).forEach((parrafo) => {
+        const p = document.createElement('p');
+        p.textContent = parrafo.trim();
+        msgBody.appendChild(p);
+      });
+
+      msgButton.style.display = 'flex';
+      msgButton.addEventListener('click', () => { msgOverlay.classList.add('visible'); });
+      msgClose.addEventListener('click', () => { msgOverlay.classList.remove('visible'); });
+      msgOverlay.addEventListener('click', (e) => { if (e.target === msgOverlay) msgOverlay.classList.remove('visible'); });
+    }
+
+    // Escena WebGL con Three.js
+    const canvas = document.getElementById('c');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
+    camera.position.z = 300;
+
+    // Campo de Estrellas
+    (function makeStars(count = 2000, spread = 3000) {
+      const g = new THREE.BufferGeometry();
+      const pos = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        const r = spread * (0.3 + Math.random() * 0.7);
+        const th = Math.random() * Math.PI * 2;
+        const ph = Math.acos(2 * Math.random() - 1);
+        pos[i * 3 + 0] = r * Math.sin(ph) * Math.cos(th);
+        pos[i * 3 + 1] = r * Math.cos(ph);
+        pos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+      }
+      g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      scene.add(new THREE.Points(g, new THREE.PointsMaterial({ size: 1.5, color: 0xffffff, depthWrite: false })));
+    })();
+
+    // Agujero Negro
+    const core = new THREE.Mesh(
+      new THREE.SphereGeometry(40, 64, 64),
+      new THREE.MeshBasicMaterial({ color: 0x030303 })
+    );
+    scene.add(core);
+
+    // Anillo
+    function ringTexture(size = 1024) {
+      const c = document.createElement('canvas'); c.width = c.height = size;
+      const g = c.getContext('2d'); g.translate(size / 2, size / 2);
+      const rInner = size * 0.205, rOuter = size * 0.49;
+      const grd = g.createRadialGradient(0, 0, rInner, 0, 0, rOuter);
+      grd.addColorStop(0.00, 'rgba(240,250,255,1)');
+      grd.addColorStop(0.30, 'rgba(120,190,255,1)');
+      grd.addColorStop(0.65, 'rgba(40,140,255,0.95)');
+      grd.addColorStop(1.00, 'rgba(0,90,220,0.85)');
+      g.fillStyle = grd;
+      g.beginPath(); g.arc(0, 0, rOuter, 0, Math.PI * 2); g.arc(0, 0, rInner, 0, Math.PI * 2, true); g.closePath(); g.fill();
+      return new THREE.CanvasTexture(c);
+    }
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(42, 116, 160),
+      new THREE.MeshBasicMaterial({ map: ringTexture(), transparent: true, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
+    );
+    ring.rotation.x = Math.PI / 2;
+    ring.rotation.z = 0.34;
+    scene.add(ring);
+
+    // Frases Flotantes
+    function makeTextTexture(texto, color) {
+      const c = document.createElement('canvas'); c.width = 512; c.height = 128;
+      const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#fff'; ctx.shadowColor = color; ctx.shadowBlur = 30;
+      let fontSize = 48;
+      ctx.font = fontSize + "px 'Indie Flower', cursive";
+      ctx.fillText(texto, c.width / 2, c.height / 2);
+      return new THREE.CanvasTexture(c);
+    }
+
+    const COLORES = ['#1E90FF', '#00BFFF', '#0099FF', '#38BDF8', '#87CEEB'];
+    const textGroup = new THREE.Group();
+    scene.add(textGroup);
+
+    CONFIG.frases.forEach((frase, i) => {
+      const tex = makeTextTexture(frase, COLORES[i % COLORES.length]);
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
+      sp.scale.set(68, 21.8, 1);
+      const phi = Math.acos(2 * Math.random() - 1);
+      const theta = Math.random() * Math.PI * 2;
+      const r = 150 + Math.random() * 120;
+      sp.position.set(r * Math.sin(phi) * Math.cos(theta), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(theta));
+      textGroup.add(sp);
+    });
+
+    // Animación y Rotación de Cámara
+    let isPointerDown = false, startX = 0, startY = 0;
+    let targetRotX = 0.2, targetRotY = 0;
+
+    function onDown(e) { isPointerDown = true; const t = e.touches ? e.touches[0] : e; startX = t.clientX; startY = t.clientY; }
+    function onMove(e) {
+      if (!isPointerDown) return;
+      const t = e.touches ? e.touches[0] : e;
+      targetRotY += (t.clientX - startX) * 0.005;
+      targetRotX += (t.clientY - startY) * 0.005;
+      startX = t.clientX; startY = t.clientY;
+    }
+    function onUp() { isPointerDown = false; }
+
+    window.addEventListener('mousedown', onDown);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchstart', onDown, { passive: true });
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('touchend', onUp, { passive: true });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      textGroup.rotation.y += 0.001;
+      ring.rotation.z += 0.0005;
+
+      camera.position.x = 300 * Math.sin(targetRotY) * Math.cos(targetRotX);
+      camera.position.y = 300 * Math.sin(targetRotX);
+      camera.position.z = 300 * Math.cos(targetRotY) * Math.cos(targetRotX);
+      camera.lookAt(scene.position);
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
